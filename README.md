@@ -1,8 +1,5 @@
 # Doc
 
-## Die wichtigsten Klassen des Programms
-![Graph](https://raw.githubusercontent.com/UranosNetworkCreation/UranosNetworkCreaton/main/dev-base-graph.png)
-
 ### Allgemeine Hinweise
 #### Syntax der Dokumentation
 Klasse (<- Vererbte Klasse)
@@ -23,6 +20,9 @@ Mit jeweiligen Kinder des Baumsystem können nun Scripte verknüpft werden. Stan
 
 ##### C++ (GDNative)
 Es kann auch C++ Code verknüpft werden, hier stellt sich jedoch die Funktionsweise etwas anders. Hierfür wird der Code zunächst in eine Dynamic-Link-Library (z. B. dll) kompiliert. Nun wird eine `.gdnlib` Datei erstellt die auf die libs für die einzelnen Plattformen verweist. Nun wird für jede Anbindung an Node des Baumsystem eine `.gdns` Datei erstellt, die unteranderem den Klassennamen und die verknüpfte `.gdnlib` Datei angibt.
+
+## Die wichtigsten Klassen des Programms
+![Graph](https://raw.githubusercontent.com/UranosNetworkCreation/UranosNetworkCreaton/main/dev-base-graph.png)
 
 ### Excecuter (<- Node)
 Die sehr kleine Klasse Excecuter stellt den Drehpunkt für die Ausführung der AI da. Sie ist im wesentlichen dafür zuständig, die events zur Ausführung auszulösen. Hierbei werden folgende Events (signals) definiert:
