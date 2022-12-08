@@ -36,6 +36,24 @@ signal ExecutingDone
 Um die AI auszuführen, stellt die Klasse nun die Funktion `exeCurrentLoaded()` bereit.
 
 ### gNode (<- GraphNode)
-Die Klasse gNode repräsentiert die Basisklasse alle Blöcke, die sich in die programmierte AI integrieren lassen. Dies betrifft unter anderem "img.gd", "INT.gd" und "DATA1D_STR.gd".
+Die Klasse gNode repräsentiert die Basisklasse alle Blöcke, die sich in die programmierte AI integrieren lassen. Dies betrifft unter anderem `img.gd`, `INT.gd` und `DATA1D_STR.gd`. Dabei kann die Klasse `gNode` als Vorschau und als aktives Node initalisiert (`init_as_preview(phantomID, previewInst, packedPth)`, `init_as_node(packedPth)`) werden.
 
 #### Die Verbindungen auf dem Graph erfassen
+Die Verbindungen eines gNodes (Klasse, die von gNode erbt) repräsentieren zwei Arrays, nähmlich `input_conns[]` und `output_conns[]`. Aktualisiert werden diese von der Funktion `updateConnections()`. Hierbei werden mittles einer for-Schleife alle verbindungen duchgegangen und anschließend geprüft, ob diese zudem jeweiligen Node gehören. Ist dies der Fall, werden die Arrays dementsprechend ergänzt:
+```GDScript
+for conn in GraphE.get_connection_list():
+		if(conn.from == name):
+			output_conns[conn.from_port] = [conn.to, conn.to_port]
+		if(conn.to == name):
+			input_conns[conn.to_port] = [conn.from, conn.from_port]
+```
+
+#### Die Daten einer Verbindung auslesen
+Um die Daten bzw. das Ergebnis eines übergeordneten Nodes zu bekommen, stellt die Klasse `gNode` zudem die Funktion `getDataOfPinConn(slot : int, backprop : bool = false, no_conn = "<undefined>")`. Hierbei wird das verbundene Node je nach Fall in der Liste `input_conns` oder `output_conns` gesucht und dann die Funtion `getPinValue(var id : int)` ausgeführt, welche dann je nach Fall entweder einer der schon berechneten Werte zurückgint oder eine neue Berechnung startet:
+```GDScript
+if(!calculated):
+    updateConnections()
+    updateCalc()
+return outputs[id]
+```
+Die Funktion updateCalc wird jenach 
