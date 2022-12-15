@@ -3,6 +3,9 @@
 ## Über das Projekt
 Das Projekt UranosNetworkCreation (kurz UNC) hat das Ziel die Erstellung von KIs deutlich zu vereinfachen. Dies geschieht über eine visuelle Programmiersprache, mit der sich komplett visuell KIs erstellen lassen, einen Datensatzeditor und ein schnelles Pluginsystem. Bei der Entwicklung wurden der Editor VSCode zu der Bearbeitung von Code verwendet und ansonsten auf Godot gesetzt.
 
+**Herunterladen:** [win64](https://github.com/UranosNetworkCreation/UNC/releases/download/alpha/v0.0.1-alpha-win64.zip)
+**Aktueller Quellcode** [Repo](https://github.com/UranosNetworkCreation/UNC)
+
 <details>
 <summary><b>Stundenprotokolle</b></summary>
 
