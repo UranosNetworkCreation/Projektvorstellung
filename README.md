@@ -381,4 +381,87 @@ Hierbei wird das `weights` Array wie folgt gebaut:
     |               |           |
    w0, w1, ...     w0, w1, ...  w0, w1, ...
 ```
+
+##### FeedForward!
+Um das Ergebnis des Layers zu berechnen stellt die Klasse die Funktion `getResult(NeuronActivationFunc activation_func, PoolRealArray input)` bereit. Diese berechnet das Ergebnis jedes Neurons so: Ergebnis = Aktivierungsfunktion(w0 * input0, w1 * input1, ...). Dies ist nun mit mehreren Schleifen umgesetzt:
+```C++
+// Update lastInput
+lastInput = input;
+
+// Create result array
+PoolRealArray result;
+
+// Do activation_func(wi * conn, ...) for each neuron
+for(int i=0;i<size;i++) {
+    float neuronInputValue = 0;
+    // ...
+    for(int ci=0;ci<parentSz;ci++) {
+        real_t value = ((PoolRealArray)(weights[i]))[ci] * input[ci];
+        // ...
+        neuronInputValue += value;
+    }
+    // ...
+    result.append(activation_func(neuronInputValue));
+}
+
+// Update lastresult
+lastResult = result;
+
+return result;
+```
+
+##### Back propagation
+Für die Back propagation stellt die Klasse Layer die Funktion `backprop(PoolRealArray under_grad, Array under_weights NeuronActivationFunc derivative, bool outputLayer, real_t learning_rate)`. In der Funktion wird nun zunächst der Gradient für jedes Neuron des Layers ausgerechnet. Dies ist, wie zu erwarten, für HiddenLayer anders umgesetzt als für outputlayer. Für die OutputLayer ist die Implementierung nämlich noch relativ einfach:
+```C++
+for (int idx = 0; idx < size; idx++) {
+        // push the calculated result back
+        gradient.push_back((lastResult[idx] - under_grad[idx]) * derivative(lastResult[idx]));
+    }
+```
+Und auch für die HiddenLayer ist es eigentlich machbar (hierbei hat mir [folgendes](https://www.youtube.com/watch?v=EAtQCut6Qno&t=0s) Video sehr geholfen):
+```C++
+for (int idx = 0; idx < size; idx++) {
+    real_t sum = 0;
+    // ci = connection index
+    for(int ci = 0; ci < under_weights.size(); ci++) {
+        // Add to sum
+        sum += ((PoolRealArray)under_weights[ci])[idx] * under_grad[ci];                                                                             
+    }
+
+    // push back calculated result
+    gradient.push_back(sum * derivative(lastResult[idx]));
+}
+```
+Nachdem man nun den Gradienten des Layers erfolgreich bestimmt hat, muss man nur noch die Gewichte mit diesem updaten. Dies lässt sich wie folgt tun:
+```C++
+Array nWeights;
+    for (int idx = 0; idx < size; idx++) {
+        PoolRealArray connWeights;
+        for(int i = 0; i < parentSz; i++) {
+            // ...
+            // Get last input
+            real_t lastInputV = lastInput[i];
+            // ...
+            // Get gradient
+            real_t gradientV = gradient[idx];
+            // ...
+            // Calculate nValue
+            real_t nValue = ((PoolRealArray)weights[idx])[i] - (learning_rate * lastInputV * gradientV);
+            // ...
+            // push back to weights array
+            connWeights.push_back(nValue);
+        }
+
+        // push back to new weights
+        nWeights.push_back(connWeights);
+    }
+    // ...
+    // Update weights
+    weights = nWeights;
+```
+
+Nun wird schlussendlich nurnoch der Gradient für die Berechnung des nächsten Gradienten zurückgegeben:
+```C++
+return gradient;
+```
 </details>
