@@ -349,30 +349,30 @@ Zum Bauen des Layers stellt die Klasse zwei wichtige Funktionen bereit, nämlich
 ```C++
 Ref<RandomNumberGenerator> rnd = RandomNumberGenerator::_new();
 
-    // Create empty weights array
-    Array Nweights = Array();
+// Create empty weights array
+Array Nweights = Array();
 
-    // Init rng
-    if(seed == -1) {
-        Godot::print("   | prepare pseudo-rnd: randomize seed ...");
-        rnd->randomize();
+// Init rng
+if(seed == -1) {
+    Godot::print("   | prepare pseudo-rnd: randomize seed ...");
+    rnd->randomize();
+}
+else {
+    Godot::print("   | prepare pseudo-rnd: set seed ...");
+    rnd->set_seed(seed);
+}
+
+// Randomize weights
+for(size_t i = 0; i < size;i++) {
+    PoolRealArray randomizedArr;
+    std::stringstream msg;
+    // ...
+    for(size_t ci = 0; ci < parent_size; ci++) {
+        randomizedArr.push_back(rnd->randf());
     }
-    else {
-        Godot::print("   | prepare pseudo-rnd: set seed ...");
-        rnd->set_seed(seed);
-    }
-    
-    // Randomize weights
-    for(size_t i = 0; i < size;i++) {
-        PoolRealArray randomizedArr;
-        std::stringstream msg;
-        // ...
-        for(size_t ci = 0; ci < parent_size; ci++) {
-            randomizedArr.push_back(rnd->randf());
-        }
-        // ...
-        Nweights.push_back(randomizedArr);
-    }
+    // ...
+    Nweights.push_back(randomizedArr);
+}
 ```
 
 Hierbei wird das `weights` Array wie folgt gebaut:
