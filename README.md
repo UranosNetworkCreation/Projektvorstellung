@@ -267,3 +267,60 @@ plugins.append(pluginRef)
 print("[PluginLoader] plugin ", pluginRef.getInfo(), " loaded.")
 ```
 </details>
+
+<details>
+<summary>
+<b>Die wichtigsten Klassen des Programms (C++)</b>
+</summary>
+
+### NetworkKernelPlugin (<- godot::Object)
+Die Klasse `NetworkKernelPlugin` stellt die Basisklasse für alle KI-Plugins da. Sie gibt die Rahmen an und legt die Funktionen fest, die definiert sein müssen. Dazu gehören unter anderem:
+```C++
+virtual NetworkKernelPluginInfo getInfo() {
+    return NetworkKernelPluginInfo("Default", "None", "", "None");
+}
+
+virtual int buildLayer(int size, int parent_size, Array weights) {
+    return -1;
+}
+
+virtual PoolRealArray BackpropLayer(
+    int id,
+    PoolRealArray underGrad,
+    Array underWeights,
+    int activationFunc,
+    bool outputLayer = false,
+    real_t learning_rate = 0.2
+) {
+    return PoolRealArray();
+}
+
+virtual PoolRealArray SimpleLayerCall(
+    int id,
+    PoolRealArray input,
+    int activationFunc
+) {
+    return PoolRealArray();
+}
+
+virtual Array getLayerWeights(
+    int id
+) {
+    return Array();
+}
+```
+Des Weiteren übernimmt Sie Teile der Registrierung von Funktionen bei GDN-API in der überschriebenen Funktion `_register_methods()`:
+```C++
+register_method("getInfo", &NetworkKernelPlugin::getInfoArray);
+register_method("simple_layer_call", &NetworkKernelPlugin::SimpleLayerCall);
+register_method("build_layer", &NetworkKernelPlugin::buildLayer);
+register_method("backprop_layer", &NetworkKernelPlugin::BackpropLayer);
+register_method("get_layer_weights", &NetworkKernelPlugin::getLayerWeights);
+```
+Insgesamt arbeiten die Layer spezifischen Funktionen auf Basis von Indexen, d.h. jedes Layer bekommt einen Index mit welchem dann auch weitere Funktionen aufgerufen werden müssen.
+
+### UranosKernel (<- NetworkKernelPlugin)
+Die Klasse `UranosKernel` stellt aktuell das einzige KI-Plugin da. Die KI-Engine ist komplett von mir programmiert. Hier nur ein Einblick in die wichtigsten Teile der Klasse.
+#### Die Verwaltung von Layern
+Alle aktuellen Layer werden in einer Array des Types `std::vector<Layer>` namens `Layers` gespeichert.
+</details>
