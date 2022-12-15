@@ -343,4 +343,42 @@ PoolRealArray lastInput;
 ```
 
 Hierbei werden in der Variable `weights` die Gewichte des Layers gespeichert, `size` stellt die Größe des Layers da, `parentSz` stellt die Größe der übergebenen Daten des übergeordneten Blockes (Im Graph der Block am linkem Data1D slot) da und lastResult sowie lastInput jeweils die letzten Ergebnisse bzw. Inputs.
+
+##### Das Bauen des Layers
+Zum Bauen des Layers stellt die Klasse zwei wichtige Funktionen bereit, nämlich `buildFromWeights(Array n_weights, size_t n_size, size_t parent_size)` und `build(size_t n_size, size_t parent_size, int64_t seed = -1)`. Die Funktion `buildFromWeights` kopiert hierbei vor allem die übergebenen Paramter auf die Eigenschaften des Layersm während die Funktion `build` noch die gesamten Gewichte euf zufällige Werte setzt. Dies geschieht wie folgt:
+```C++
+Ref<RandomNumberGenerator> rnd = RandomNumberGenerator::_new();
+
+    // Create empty weights array
+    Array Nweights = Array();
+
+    // Init rng
+    if(seed == -1) {
+        Godot::print("   | prepare pseudo-rnd: randomize seed ...");
+        rnd->randomize();
+    }
+    else {
+        Godot::print("   | prepare pseudo-rnd: set seed ...");
+        rnd->set_seed(seed);
+    }
+    
+    // Randomize weights
+    for(size_t i = 0; i < size;i++) {
+        PoolRealArray randomizedArr;
+        std::stringstream msg;
+        // ...
+        for(size_t ci = 0; ci < parent_size; ci++) {
+            randomizedArr.push_back(rnd->randf());
+        }
+        // ...
+        Nweights.push_back(randomizedArr);
+    }
+```
+
+Hierbei wird das `weights` Array wie folgt gebaut:
+```
+[(Neuron 0),    (Neuron 1),    (...)]
+    |               |           |
+   w0, w1, ...     w0, w1, ...  w0, w1, ...
+```
 </details>
