@@ -14,7 +14,7 @@ Wenn Sie ihre KI fertig gebaut haben und alle Daten eingetragen haben, kann dies
 
 ### Schritt 3: Einen Trainingsbereich erstellen
 ![AddtrainPoint.gif](https://github.com/UranosNetworkCreation/Doc/blob/main/img/AddTrainPoint.gif?raw=true)
-Um einen Trainingsbereich zu erstellen wird unter der Registerkarte Training mit dem Plussymbol eine neue Kachel hinzugefügt. Nun kann, in dem der Pfeil nebem dem Start und Entpunkt auf den Block gezogen wird, ein Bereich festgelegt werden. Die Kachel sollte nun circa so aussehen:
+Um einen Trainingsbereich zu erstellen wird unter der Registerkarte Training mit dem Plussymbol eine neue Kachel hinzugefügt. Nun kann, in dem der Pfeil nebem dem Start und Entpunkt auf den Block gezogen wird, ein Bereich festgelegt werden. Die Kachel sollte nun circa so aussehen:<br>
 ![training_area.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/training_area.png?raw=true)
 
 ### Schritt 4: Den Datensatz des Trainingsbereiches bearbeiten
