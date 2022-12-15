@@ -9,7 +9,10 @@ Ein mögliches grundgerüst könnte wie folgt aussehen:
 Die gebaute KI auf dem Bild besitzt zwei Layer, wobei das letzte automatisch als Output Layer fungiert (Wird software-intern geregelt). Ansonsten stellt das Data1D Node die Input Daten bereit. Zum Schluss wird das generierte Array zudem noch zu einem String konvertiert, da mit es in der Seitenbar angezeigt werden kann. Beim bauen des Codes sollte zudem schon automatisch ein Ausgabefeld in der Seitenleiste erstellt werden.
 
 ### Schritt 2: Den Code ausführen
-Wenn Sie ihre KI fertig gebaut haben und alle Daten eingetragen haben, kann diese nun über das Playzeichen in der Ecke oben Rechts ausgeführt werden. das Ergebnis sollte hierbei in der Seitenleiste sichtbar werden und etwa so aussehen:
+Wenn Sie ihre KI fertig gebaut haben und alle Daten eingetragen haben, kann diese nun über das Playzeichen in der Ecke oben Rechts ausgeführt werden. das Ergebnis sollte hierbei in der Seitenleiste sichtbar werden und etwa so aussehen:<br>
+![string_output.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/string_output.png?raw=true)
+
+### Schritt 3: Einen Trainingsbereich erstellen
 
 
 ## Wie es funktioniert
