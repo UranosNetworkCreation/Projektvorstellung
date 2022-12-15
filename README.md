@@ -1,5 +1,13 @@
 # Doc
+## Mit der Software arbeiten
+Hier will ich nur kurz vorstellen, wie sich ein simples Testprojekt erstellen lässt, bei dem eine KI darauf Trainiert wird Zahlenfolgen zu erkennen.<br>
+**Achtung**: *Die Software ist bis jetzt wenig auf falsche Blockkombinationen, leere Verbindungen, etc. programmiert weshalb diese in solch einem Fall meist abstürtzen wird. Dieses Problem werde ich vor allem im 2. Halbjahr angehen.*
 
+### Schritt 1: Das Grundgerüst in der visuellen Programmiersprache bauen
+Ein mögliches grundgerüst könnte wie folgt aussehen:
+![base graph]()
+
+## Wie es funktioniert
 ### Allgemeine Hinweise
 #### Syntax der Dokumentation
 Klasse (<- Vererbte Klasse)
