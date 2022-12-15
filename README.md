@@ -435,29 +435,29 @@ for (int idx = 0; idx < size; idx++) {
 Nachdem man nun den Gradienten des Layers erfolgreich bestimmt hat, muss man nur noch die Gewichte mit diesem updaten. Dies lässt sich wie folgt tun:
 ```C++
 Array nWeights;
-    for (int idx = 0; idx < size; idx++) {
-        PoolRealArray connWeights;
-        for(int i = 0; i < parentSz; i++) {
-            // ...
-            // Get last input
-            real_t lastInputV = lastInput[i];
-            // ...
-            // Get gradient
-            real_t gradientV = gradient[idx];
-            // ...
-            // Calculate nValue
-            real_t nValue = ((PoolRealArray)weights[idx])[i] - (learning_rate * lastInputV * gradientV);
-            // ...
-            // push back to weights array
-            connWeights.push_back(nValue);
-        }
-
-        // push back to new weights
-        nWeights.push_back(connWeights);
+for (int idx = 0; idx < size; idx++) {
+    PoolRealArray connWeights;
+    for(int i = 0; i < parentSz; i++) {
+        // ...
+        // Get last input
+        real_t lastInputV = lastInput[i];
+        // ...
+        // Get gradient
+        real_t gradientV = gradient[idx];
+        // ...
+        // Calculate nValue
+        real_t nValue = ((PoolRealArray)weights[idx])[i] - (learning_rate * lastInputV * gradientV);
+        // ...
+        // push back to weights array
+        connWeights.push_back(nValue);
     }
-    // ...
-    // Update weights
-    weights = nWeights;
+
+    // push back to new weights
+    nWeights.push_back(connWeights);
+}
+// ...
+// Update weights
+weights = nWeights;
 ```
 
 Nun wird schlussendlich nurnoch der Gradient für die Berechnung des nächsten Gradienten zurückgegeben:
