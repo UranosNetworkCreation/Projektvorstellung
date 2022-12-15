@@ -37,7 +37,7 @@ Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt wer
 Klasse (<- Vererbte Klasse)
 
 #### Godot
-Das Projekt verwendet Godot 3, welches Standartfunktionen sowie UI-Elemente bereitstellt, auf denen die Software aufbaut. Da das Projekt langfristog auch 3D Modelle generieren soll, wurde hier bewusst auf eine Basis gesetzt, die auch als GameEngine genutzt werden kann, da so viele Funktionen auch im Bezug auf 3D Modelle schon vorhanden sind.<br>
+Das Projekt verwendet Godot 3, welches Standartfunktionen sowie UI-Elemente bereitstellt, auf denen die Software aufbaut. Da das Projekt langfristig auch 3D Modelle generieren soll, wurde hier bewusst auf eine Basis gesetzt, die auch als GameEngine genutzt werden kann, da so viele Funktionen auch im Bezug auf 3D Modelle schon vorhanden sind.<br>
 Die Engine selbst nutzt eine Art Baumsystem, welches immer von unterschiedlichen Szenen ergänzt wird. Alle Kinder des Baumsystems erben dabei von der Klasse Node oder Klassen, die wiederrum von Node erben. So könnte eine Szene mit zwei Button und einem Label von der Struktur so aussehen:
 
 ```
@@ -53,7 +53,9 @@ Mit jeweiligen Kinder des Baumsystem können nun Scripte verknüpft werden. Stan
 ##### C++ (GDNative)
 Es kann auch C++ Code verknüpft werden, hier stellt sich jedoch die Funktionsweise etwas anders. Hierfür wird der Code zunächst in eine Dynamic-Link-Library (z. B. dll) kompiliert. Nun wird eine `.gdnlib` Datei erstellt die auf die libs für die einzelnen Plattformen verweist. Nun wird für jede Anbindung an Node des Baumsystem eine `.gdns` Datei erstellt, die unteranderem den Klassennamen und die verknüpfte `.gdnlib` Datei angibt.
 
-## Die wichtigsten Klassen des Programms
+<details>
+<summary><b>Die wichtigsten Klassen des Programms</b></summary>
+
 ![Graph](https://raw.githubusercontent.com/UranosNetworkCreation/UranosNetworkCreaton/main/dev-base-graph.png)
 
 ### Excecuter (<- Node)
@@ -81,11 +83,109 @@ for conn in GraphE.get_connection_list():
 ```
 
 #### Die Daten einer Verbindung auslesen
-Um die Daten bzw. das Ergebnis eines übergeordneten Nodes zu bekommen, stellt die Klasse `gNode` zudem die Funktion `getDataOfPinConn(slot : int, backprop : bool = false, no_conn = "<undefined>")`. Hierbei wird das verbundene Node je nach Fall in der Liste `input_conns` oder `output_conns` gesucht und dann die Funtion `getPinValue(var id : int)` ausgeführt, welche dann je nach Fall entweder einer der schon berechneten Werte zurückgint oder eine neue Berechnung startet:
+Um die Daten bzw. das Ergebnis eines übergeordneten Nodes zu bekommen, stellt die Klasse `gNode` zudem die Funktion `getDataOfPinConn(slot : int, backprop : bool = false, no_conn = "<undefined>")`. Hierbei wird das verbundene Node je nach Fall in der Liste `input_conns` oder `output_conns` gesucht und dann die Funtion `getPinValue(var id : int)` ausgeführt, welche dann je nach Fall entweder einer der schon berechneten Werte zurückgibt oder eine neue Berechnung startet:
 ```GDScript
 if(!calculated):
     updateConnections()
     updateCalc()
 return outputs[id]
 ```
-Die Funktion updateCalc wird jenach 
+Die Funktion updateCalc wird von Klassen, die von gNode erben, überschrieben, sodass für jeden Block die Werte individuell geupdated werden können.<br>
+Ein ähnliches Prinzip wird auch beim "Rückwärtsrechen"(Auflösen des Graphes in die andere Richtung) angewand. Hier wird die Funktion `backCalc` überschrieben.
+
+#### Daten speichern und laden
+Um Daten (Einstellungen eines Nodes) aus einer Resource laden und speichern zu können wird eine eigne Resource namens `NodeData` verwendet. Diese besitzt folgende Eigenschaften:
+```GDSCript
+export var type : String
+export var offset : Vector2
+export var data : Array
+export var name : String
+```
+Diese werden nun beispielsweise beim speichern des Nodes 
+ in der Funktion `getNodeData()` gesetzt:
+```GDScript
+data.data = DataSync.collectData()
+data.offset = self.offset
+data.type = self.packedPath
+data.name = self.name
+```
+Der DataSync stellt hierbei eine Instanz der Klasee ResDataSync da, welche ich auch noch einmal erläutere.
+
+### Graph (<- GraphEdit)
+Die Klasse `Graph` ist im wesentlichem dafür zuständig, die Events bei der bearbeitung des visuellem Programm zu bearbeiten. Allerdings stellt SIe auch funktionen zum Laden und generieren von Resourcen bereit.
+#### Verbindungsanfragen
+Verbindungsanfragen werden in der Funktion `_on_GraphEdit_connection_request(from:String, from_slot:int, to:String, to_slot:int)` wie folgt gehandelt:
+```GDSCript
+# Check if nodes are already connected
+for con in get_connection_list():
+    if con.to == to and con.to_port == to_slot:
+        print("[Graph] Exit from connection request process. Warning: You can't double connect nodes")
+        return
+
+# Connect nodes
+print("[Graph] Connect nodes(from: ", from, ", from_slot: ", from_slot, ", to: ", to, ", to_slot: ", to_slot, "): ", connect_node(from, from_slot, to, to_slot))
+```
+
+Hierbei wird zunächst überprüft ob die beiden Blöcke schon miteinander verbunden sind. Ist dies nicht der Fall, wird eine neue Verbindung zwischen den beiden Blöcken erstellt.
+#### Nodes löschen
+Auch für das löschen von gibt es eine extra Handlefunktion. Hier werden die nodes realtiv simple nacheinander gelöscht:
+```GDScript
+for node in nodes:
+    print("[GraphEdit] Del node " + node)
+    # remove connections
+    remove_connections_to_node(node)
+    # delete node
+    get_node(node).queue_free()
+```
+#### Laden und Speichern von Daten
+Den Rahmen für das Laden und Speichern bildet hier die Resource GraphData, die nur zwei Arrays speichert:
+```GDScript
+export var nodes : Array = []
+export var conns : Array = []
+```
+Hierbei stellt nun das Array `nodes` relativ einfach eine Sammlung aus allen NodeData Resourcen der jeweiligen Blöcke da
+und dass Array `conns` eine aus allen Verbindungen. Diese werden nun in der Funktion `loadData(var data : GraphData)` wie folgt geladen:
+```GDScript
+# Load nodes
+for node in data.nodes:
+    print("[Editor][OpenFile] Creating node with type: " + node.type)
+    # Create node inst
+    var nodeInst = load(node.type).instance()
+    nodeInst.offset = node.offset
+    nodeInst.name = node.name
+
+    # Add node inst to Graph
+    add_child(nodeInst)
+    # Init inst and load data
+    nodeInst.init_as_node(node.type)
+    nodeInst.DataSync.loadData(node.data)
+    # Update connections array
+    data.conns = updateConnectionNodeName(node.name, nodeInst.name, data.conns)
+
+# Load connections
+for conn in data.conns:
+    # connect nodes
+    print("[Editor][OpenFile] Conn nodes: ", connect_node(conn.from, conn.from_port, conn.to, conn.to_port))
+```
+
+Das speichern stellt sich hier etwas simpler da, dies geschieht in der Funktion `getData()`:
+
+```GDScript
+# Create new GraphData container
+var gData : GraphData = GraphData.new()
+
+# For each block ...
+for child in get_children():
+    if child is GraphNode:
+        print("[Editor][Save] Collect node data ...")
+        # Append node specific data to container
+        gData.nodes.append(child.getNodeData())
+
+# Add connection to data
+gData.conns = get_connection_list()
+return gData
+```
+
+### ResDataSync
+Der `ResDataSync` stellt vor allem beim Laden und speichern eine wichtige Rolle. Zusammengefasst besitzt Sie die Funktion alle Kinder eines Nodes durch zu gehen, zu gucken, ob dies Eingabefelder (oder ähnliches) sind, und dann eine Array aus den eingebenen Werten zu erstellen. Sie kann zudem auch eine solche Array auf mehere Eingabefelder laden.
+</details>
