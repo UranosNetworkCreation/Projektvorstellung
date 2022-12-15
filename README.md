@@ -4,7 +4,7 @@ Hier will ich nur kurz vorstellen, wie sich ein simples Testprojekt erstellen l�
 **Achtung**: *Die Software ist bis jetzt wenig auf falsche Blockkombinationen, leere Verbindungen, etc. programmiert weshalb diese in solch einem Fall meist abstürtzen wird. Dieses Problem werde ich vor allem im 2. Halbjahr angehen.*<br><br>
 
 <details>
-<summary><b>Ein simples Projekt erstellen</b></summary><br>
+<summary><b>Ein simples Projekt erstellen</b></summary>
 
 ### Schritt 1: Das Grundgerüst in der visuellen Programmiersprache bauen
 Ein mögliches grundgerüst könnte wie folgt aussehen:
