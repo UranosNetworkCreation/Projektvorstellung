@@ -61,8 +61,6 @@ Es kann auch C++ Code verknüpft werden, hier stellt sich jedoch die Funktionswe
 <details>
 <summary><b>Die wichtigsten Klassen des Programms (GDScript)</b></summary>
 
-![Graph](https://raw.githubusercontent.com/UranosNetworkCreation/UranosNetworkCreaton/main/dev-base-graph.png)
-
 ### Excecuter (<- Node)
 Die sehr kleine Klasse Excecuter stellt den Drehpunkt für die Ausführung der AI da. Sie ist im wesentlichen dafür zuständig, die events zur Ausführung auszulösen. Hierbei werden folgende Events (signals) definiert:
 
