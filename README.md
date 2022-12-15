@@ -307,6 +307,40 @@ Insgesamt arbeiten die Layer spezifischen Funktionen auf Basis von Indexen, d.h.
 
 ### UranosKernel (<- NetworkKernelPlugin)
 Die Klasse `UranosKernel` stellt aktuell das einzige KI-Plugin da. Die KI-Engine ist komplett von mir programmiert. Hier nur ein Einblick in die wichtigsten Teile der Klasse.
+
 #### Die Verwaltung von Layern
-Alle aktuellen Layer werden in einer Array des Types `std::vector<Layer>` namens `Layers` gespeichert.
+Alle aktuellen Layer werden in einer Array des Types `std::vector<Layer>` namens `Layers` gespeichert. Die wesentlichen Funktionen des Layers sind in der `Layer` definiert. Infolge Dessen stellt die Basisklasse `UranosKernel` im wesentlichen eine Reihe von Wrapperfunktionen bereit, die dann mit den benötigten Daten die eigentlichen Funktionen der jeweiligen Instanz der Klasse Layer aufrufen. Hier nur ein Einspiel anhand des Feedforward Prozesses in der Funktion `SimpleLayerCall(int id, PoolRealArray input, int activationFunc`:
+```C++
+NeuronActivationFunc aFunc;
+
+// Set the activation func
+switch (activationFunc)
+{
+case ACTIVATION_FUNC_SIGMOID:
+    aFunc = &UranosKernel::AFuncs::sigmoid;
+    break;
+
+default:
+    Godot::print("[UranosKernel] No Support for selected activation func. Use sigmoid as default ...");
+    aFunc = &UranosKernel::AFuncs::sigmoid;
+    break;
+}
+
+// Call the Layer and return the result
+return Layers[id].getResult(aFunc, input);
+}
+```
+Hierbei wird zunächst Anhand der übergebenen ID der Aktivierungsfunktion der Pointer auf diese bestimmt und dann die eigentliche Funktion der Klasse Layer aufgerufen.
+
+#### Die Klasse Layer
+Die Klasse Layer stellt ein Layer da. Dabeuí besitzt die Klasse folgende wichtige Variablen:
+```C++
+Array weights;
+size_t size;
+size_t parentSz;
+PoolRealArray lastResult;
+PoolRealArray lastInput;
+```
+
+Hierbei werden in der Variable `weights` die Gewichte des Layers gespeichert, `size` stellt die Größe des Layers da, `parentSz` stellt die Größe der übergebenen Daten des übergeordneten Blockes (Im Graph der Block am linkem Data1D slot) da und lastResult sowie lastInput jeweils die letzten Ergebnisse bzw. Inputs.
 </details>
