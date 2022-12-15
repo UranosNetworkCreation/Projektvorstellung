@@ -276,14 +276,8 @@ print("[PluginLoader] plugin ", pluginRef.getInfo(), " loaded.")
 ### NetworkKernelPlugin (<- godot::Object)
 Die Klasse `NetworkKernelPlugin` stellt die Basisklasse für alle KI-Plugins da. Sie gibt die Rahmen an und legt die Funktionen fest, die definiert sein müssen. Dazu gehören unter anderem:
 ```C++
-virtual NetworkKernelPluginInfo getInfo() {
-    return NetworkKernelPluginInfo("Default", "None", "", "None");
-}
-
-virtual int buildLayer(int size, int parent_size, Array weights) {
-    return -1;
-}
-
+virtual NetworkKernelPluginInfo getInfo();
+virtual int buildLayer(int size, int parent_size, Array weights);
 virtual PoolRealArray BackpropLayer(
     int id,
     PoolRealArray underGrad,
@@ -291,23 +285,15 @@ virtual PoolRealArray BackpropLayer(
     int activationFunc,
     bool outputLayer = false,
     real_t learning_rate = 0.2
-) {
-    return PoolRealArray();
-}
-
+);
 virtual PoolRealArray SimpleLayerCall(
     int id,
     PoolRealArray input,
     int activationFunc
-) {
-    return PoolRealArray();
-}
-
+);
 virtual Array getLayerWeights(
     int id
-) {
-    return Array();
-}
+);
 ```
 Des Weiteren übernimmt Sie Teile der Registrierung von Funktionen bei GDN-API in der überschriebenen Funktion `_register_methods()`:
 ```C++
