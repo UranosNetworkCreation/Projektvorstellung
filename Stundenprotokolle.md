@@ -22,4 +22,78 @@ Heute habe ich weiter versucht die Probleme des vorherigen tages zu lösen. Hier
 Heute habe ich die gesamte Architektur grundsätzlich verändert, da ich große Probleme dabei hatte den in C++ geschriebenen PluginLoader fertigzustellen, da mir weder eine ausführliche Google-Suche noch stackoverflow weiterhalf. Dementsprechend habe ich mich dann dazu entschieden den PluginLoader in GDScript zu schreiben und nur die eigentlichen Netzwerkplugins in C++ zu coden. Dementsprechend habe ich dann viel im Repo umsortiert und auch den neuen PluginLoader geschrieben.
 
 ## 15. Nov. 2022
-Heute habe ich den gestern neu angefangenen PluginLoader weiterentwickelt und auch das Fundament für die aktuelle Oberfläche des Editors gelegt. Hierbei habe ich auch den angefangen den Code für den Graphen zu schreiben, wobei mir folgende [Resource](https://gdscript.com/solutions/godot-graphnode-and-graphedit-tutorial/) sehr viel geholfen hat.
+Heute habe ich den gestern neu angefangenen PluginLoader weiterentwickelt und auch das Fundament für die aktuelle Oberfläche des Editors gelegt. Hierbei habe ich auch den angefangen den Code für den Graphen zu schreiben, wobei mir folgende [Resource](https://gdscript.com/solutions/godot-graphnode-and-graphedit-tutorial/) sehr viel geholfen hat. Ansonsten war es eigentlich schon fast etwas langweilig, weil ich im wesentlichen im visuellem Editor der Godot-Engine die GUI designed habe.
+
+## 16. und 17. Nov. 2022
+Heute habe ich angefangen die grundsätzliche Funktionalität der GraphNodes (Blöcke) zu programmieren. Hierbei habe ich unter anderem eine Funktion namens `updateConnections` hinzufügt, die Verbindung der gesamten Arbeitsfläche einliest und den jeweiligen Nodes zuordnet.
+```GDScript
+func updateConnections():
+	input_conns = []
+	output_conns = []
+	for _i in range(slotCount):
+		input_conns.append(NO_CONN)
+		output_conns.append(NO_CONN)
+	for conn in GraphE.get_connection_list():
+		if(conn.from == name):
+			output_conns[conn.from_port] = [conn.to, conn.to_port]
+		if(conn.to == name):
+			input_conns[conn.to_port] = [conn.from, conn.from_port]
+	print("IConnections of ", name, ": ", input_conns, ", ", output_conns)
+```
+Zudem habe ich die Klasse `Executer`geschrieben, die ich für die zentrale Lenkung der Ausführung des Codes angedacht hatte.
+
+## 22. Nov. 2022
+Heute habe ich die im Wesentlichen die Funktionalitaät für Blöcke auf weitere Blöcke erweitert, sodass diese nun auch nutzbar sind. Zudem habe ich die grundlegende Struktur geschrieben, damit Projekte geladen und gespeichert werden können. In Ergänzung dazu habe ich auch eine Statusbar in die GUI eingefügt, auf der eine Info beim Speichern wie auch bei normalen Programmen erscheinen soll.
+
+## 23. Nov. 2022
+Da das Projekt in seiner Entwicklung jetzt schon deutlich fortgeschritten war, habe ich einen Ordner für Beispiele zum Repo hinzugefügt und auch die README geupdated. Zudem habe ich eine kleine Zeichnung in excalidraw gestaltet, welche die grundlegene Funktionalität des Programms wiederspiegelt. Zudem musste ich ein bisschen OneDrive (Meinem Cloudprogramm) hinterherräumen, weil es irgendwie verschiedene Dateien falsch kopiert hatte.
+
+## 24. Nov. 2022
+Heute habe ich aufgrund des immer größer werdenen Projektes auch eine THIRDPARTY Datei angelegt, die eine gesamte Übersicht über die von dem Projekt verwendeten Resourcen/Dateien gibt. Bei spezifischen Erweiterungen (Themes, etc.) die in sich sehr abgeschlossen sin habe ich die Lizenzdatei immer direkt in den Basisordner gelegt. Zudem habe ich eine kleine Webseite auf Github pages angefangen ([https://uranosnetworkcreation.github.io](https://uranosnetworkcreation.github.io)) und die normale README auch dementsprechend angepasst.
+
+## 30. Nov. 2022
+Heute habe ich die Weseite weiter ausgebaut sowie am Dateisystem der Software weiterprogrammiert. Hierbei stellte sich schnell die Schwierigkeit heraus, dass einzelne Nodes oft doppelt gespeichert wurden oder beim Laden von Projekten die Nodes des vorherigen Projektes noch nicht richtig gelöscht waren, wodurch es interne Namenskonflikte bei den Blöcken gab. Hierdurch wurden dann natürlich die abgespeicherten Verbindungsinformationen ungültig.
+
+## 1. Dez. 2022
+Nachdem ich gestern schon ein großes Stück an der Webseite weitergemacht hatte, habe ich auch nun heute nochmal einiges ergänzt. So habe ich ein Menü hinzugefügt und dazu dann auch noch die Seite in verschiedene Unterseiten aufgeteilt. Beim Menü erwies sich das Design zudem als etwas schwierig, weil ich es in die Beschreibung der Weseite einfügen musste. Dies war leider dem von mir verwendetem Theme geschuldet, da dies eigentlich keine Menübar vorsah. Zudem habe ich am Laden und Speichern von Dateien weitergearbeitet und das gestrige Problem durch eine Funktion gelöst, die die Array mit den Verbindungen bei Namenskonflikten automatisch updated.
+```GDScript
+func updateConnectionNodeName(var old : String, var new : String, var conns : Array) -> Array:
+	var result : Array = []
+	for conn in conns:
+		var nconn = conn
+		if(nconn.from == old):
+			nconn.from = new
+		if(nconn.to == old):
+			nconn.to = new
+		result.append(nconn)
+	return result
+
+```
+
+## 8. Dez 2022
+Heute habe ich angefangen, an der Dokumentaion der Software und der einzelnen Klassen zu arbeiten. Hierbei habe ich unter anderem eine Dokumentation für den Executer und die grundfunktionsweise der Software geschrieben.
+
+## 9. Dez 2022
+Nachdem ich gestern schon die Grundlage für die Dokumentation gesetzt hatte, habe ich dies heute fortgeführt. Hierbei habe ich mir noch mehrmals Gedanken insbesondere ums layout gemacht und mich auch noch einmal in einem längerem Gespräch über die genauen Abgaberichtlinien informiert.
+
+## 10. Dez. 2022
+Heute habe ich mich stark damit beschäftigt, wie ich den AI-Kernel programmieren muss. Hierbei haben mir folgene Videos sehr geholfen:
+- https://www.youtube.com/watch?v=oCPT87SvkPM
+- https://www.youtube.com/watch?v=EAtQCut6Qno&t=0s
+
+## 11. Dez. 2022
+Heute habe ich einen riesen Meilenstein in der Entwicklung der Software gesetzt. Ich habe heute nämlich den AI-Kernel so weiter programmiert, dass diese benutzbar ist und sich Layer erstellen, trainieren und verwalten lassen. All dies funktioniert nun über das in C++ geschribene AI-Plugin über welches sich die Layer anhand von Indexes von GDScript aus verwalten lassen.
+
+## 12. Dez. 2022
+Heute habe ich zum Einstellungsdialog zuhause nur noch kurz schnell die Möglichkeit hinzugefügt, dass aktuelle theme auf ein anderes zu ändern und noch kurz eine neue Resource für eine Themensammlung implementiert:
+```GDScript
+extends Resource
+
+export var paths : PoolStringArray
+export var optimized : Array
+```
+
+## 14. Dez. 2022
+Heute habe ich nun entgültig auch die Funktion der AI mit dem Blöcken gekoppelt, sodass die Sprache nun fast voll funktionsfähig ist. Zudem habe ich dass Repo noch etwas aufgeräumt.
+
+## Was jetzt noch kommt/fehlt
