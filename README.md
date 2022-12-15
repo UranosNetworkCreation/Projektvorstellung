@@ -3,6 +3,9 @@
 Hier will ich nur kurz vorstellen, wie sich ein simples Testprojekt erstellen lässt, bei dem eine KI darauf Trainiert wird Zahlenfolgen zu erkennen.<br><br>
 **Achtung**: *Die Software ist bis jetzt wenig auf falsche Blockkombinationen, leere Verbindungen, etc. programmiert weshalb diese in solch einem Fall meist abstürtzen wird. Dieses Problem werde ich vor allem im 2. Halbjahr angehen.*<br><br>
 
+<details>
+<summary><b>Ein simples Projekt erstellen</b></summary><br>
+
 ### Schritt 1: Das Grundgerüst in der visuellen Programmiersprache bauen
 Ein mögliches grundgerüst könnte wie folgt aussehen:
 ![base graph](https://github.com/UranosNetworkCreation/Doc/blob/main/img/base_graph.png?raw=true)
@@ -26,6 +29,7 @@ Um den Datensatz zu erstellen, kann auf den Button "edit dataset ..." geklickt. 
 **Hinweis:** *Der Button "Run All" funktioniert noch nicht*<br><br>
 Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt werden und nun der Button "Start Training" gedrückt werden. Wird die KI nun über den Play-Button nochmal ausgeführt sollten sich die Ergebnisse im Output-Tab dementsprechend anpassen (Auch ohne das drücken des Play button sieht man schon eine Verbesserung, da beim Training die aktuellen Werte auch immer im Outputtab angezeigt werden).<br>
 ![train_button.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/train_button.png?raw=true)
+</details>
 
 ## Wie es funktioniert
 ### Allgemeine Hinweise
