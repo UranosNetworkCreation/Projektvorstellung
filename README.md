@@ -19,6 +19,12 @@ Um einen Trainingsbereich zu erstellen wird unter der Registerkarte Training mit
 
 ### Schritt 4: Den Datensatz des Trainingsbereiches bearbeiten
 Um den Datensatz zu erstellen, kann auf den Button "edit dataset ..." geklickt. So gelang man in den Datensatzeditor. Hier lassen sich durch Ziehen input und output Blöcke hinzufügen. So lassen sich die jeweils gewünschten Input und Outputdaten miteinander kombinieren. Ein sehr simpler Dantensatz für die obige KI könnte so aussehen:
+![simple_dataset.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/simple_dataset.png?raw=true)
+
+### Schritt 5: Die AI-Trainieren
+**Hinweis:** *Je nach PC und eingestellten Durchläufen kann hier das Programm hurz einfrieren*<br>
+**Hinweis:** *Der Button "Run All" funktioniert noch nicht*<br><br>
+Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt werden und nun der Button "Start Training" gedrückt werden. Wird die KI nun über den Play-Button nochmal ausgeführt sollten sich die Ergebnisse im Output-Tab dementsprechend anpassen (Auch ohne das drücken des Play button sieht man schon eine Verbesserung, da beim Training die aktuellen Werte auch immer im Outputtab angezeigt werden).
 
 
 ## Wie es funktioniert
