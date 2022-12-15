@@ -54,7 +54,7 @@ Mit jeweiligen Kinder des Baumsystem können nun Scripte verknüpft werden. Stan
 Es kann auch C++ Code verknüpft werden, hier stellt sich jedoch die Funktionsweise etwas anders. Hierfür wird der Code zunächst in eine Dynamic-Link-Library (z. B. dll) kompiliert. Nun wird eine `.gdnlib` Datei erstellt die auf die libs für die einzelnen Plattformen verweist. Nun wird für jede Anbindung an Node des Baumsystem eine `.gdns` Datei erstellt, die unteranderem den Klassennamen und die verknüpfte `.gdnlib` Datei angibt.
 
 <details>
-<summary><b>Die wichtigsten Klassen des Programms</b></summary>
+<summary><b>Die wichtigsten Klassen des Programms (GDScript)</b></summary>
 
 ![Graph](https://raw.githubusercontent.com/UranosNetworkCreation/UranosNetworkCreaton/main/dev-base-graph.png)
 
@@ -187,5 +187,78 @@ return gData
 ```
 
 ### ResDataSync
-Der `ResDataSync` stellt vor allem beim Laden und speichern eine wichtige Rolle. Zusammengefasst besitzt Sie die Funktion alle Kinder eines Nodes durch zu gehen, zu gucken, ob dies Eingabefelder (oder ähnliches) sind, und dann eine Array aus den eingebenen Werten zu erstellen. Sie kann zudem auch eine solche Array auf mehere Eingabefelder laden.
+Der `ResDataSync` stellt vor allem beim Laden und Speichern eine wichtige Rolle. Zusammengefasst besitzt Sie die Funktion alle Kinder eines Nodes durch zu gehen, zu gucken, ob dies Eingabefelder (oder ähnliches) sind, und dann eine Array aus den eingebenen Werten zu erstellen. Sie kann zudem auch eine solche Array auf mehere Eingabefelder laden. Die Funktion zum erstellen der Array (`collectData()`) ist wir folgt aufgebaut:
+```GDScript
+# Create empty array for the result
+var result : Array = []
+for child in bNode.get_children():
+    # Add the child's data to the result if it is a dataField
+    if(isDataField(child)):
+        result.append(getData(child))
+return result
+```
+Auch zum Laden wird in der Funktion `loadData()`ein ähnlicher Mechanismus verwendet:
+```GDSCript
+# Loads a data array
+func loadData(var data : Array):
+    # counter
+    var data_idx : int = 0
+    for child in bNode.get_children():
+        if(isDataField(child)):
+            # Apply data
+            setData(child, data[data_idx])
+            # increment counter
+            data_idx += 1
+```
+
+### Editor
+Einen zentralen Schlüsselpunkt stellt natürlich die Editorklasse da. Eine wichtige Funktion ist hier beim Laden und Speichern das zusammen führen aller Resourcen. Dies geschieht beispielsweise beim Speichern in der Funktion `save_current(path)` wie folgt:
+```GDScript
+# Create a new file container
+var file : UNCFile = UNCFile.new()
+# Assign the GraphData
+file.GData = GEdit.getData()
+# Save the file
+return ResourceSaver.save(path, file)
+```
+Auch das Laden von Dateien ist in der Funktion `open_file(path)` implementiert. Hierbei muss natürlich beachtet werden, dass vorher noch der Editor aufgeräumt werden muss:
+```GDScript
+# Load file
+var file = ResourceLoader.load(path)
+# Check if the file is a UNCFile
+if(!(file is UNCFile)):
+    print("Cannot load file because it's not an UNCFile")
+    return -1
+
+# clear
+resetEditor()
+
+# Load data
+print("[Editor] Load gEdit data ...")
+GEdit.loadData(file.GData)
+return 0
+```
+Sowohl beim Laden als auch bei Speichern wird auf die UNCFile-Resource zurückgegriffen. Theoretisch könnte man beim aktuellem Entwicklungsstand auch die GraphData Resource direkt speichern. Allerdings wäre dies dann später, wenn man das Programm erweitern würde, unpraktisch. Aufgrund dessen gibt es die UNCFile Resource, welche allerdings nur eine Eigenschaft besitzt:
+```GDScript
+export var GData : Resource
+```
+
+### PluginLoader
+Der PluginLoader stellt die Schnittstelle zwischen dem Teil des Programms in GDScript und dem in GDNative (C++) da. Er lädt nämlich die einzelnen GDN-Scripte (d.h. die Libs, siehe [offizielle Dokumentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdnative/gdnative_cpp_example.html)) und verwaltet diese. Grundsätzlich werden alle Scripte aus dem Ordner `res://plugins/gdns` geladen, welche mit keinem Punkt beginnen. Das Laden der eines Plugins ist dann wie folgt umgesetzt:
+```GDScript
+# Load plugin
+var plugin = load("res://plugins/gdns/" + file)
+print("[PluginLoader] plugin: ", plugin)
+
+# Instance plugin
+var pluginRef = plugin.new()
+
+# Check if pluginInst is valid
+if(!pluginRef.has_method("getInfo")):
+    print("[PluginLoader] Fatal error: plugin is invalid.")
+
+# Add to plugin array
+plugins.append(pluginRef)
+print("[PluginLoader] plugin ", pluginRef.getInfo(), " loaded.")
+```
 </details>
