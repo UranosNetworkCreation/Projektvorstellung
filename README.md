@@ -18,6 +18,8 @@ Um einen Trainingsbereich zu erstellen wird unter der Registerkarte Training mit
 ![training_area.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/training_area.png?raw=true)
 
 ### Schritt 4: Den Datensatz des Trainingsbereiches bearbeiten
+Um den Datensatz zu erstellen, kann auf den Button "edit dataset ..." geklickt. So gelang man in den Datensatzeditor. Hier lassen sich durch Ziehen input und output Blöcke hinzufügen. So lassen sich die jeweils gewünschten Input und Outputdaten miteinander kombinieren. Ein sehr simpler Dantensatz für die obige KI könnte so aussehen:
+
 
 ## Wie es funktioniert
 ### Allgemeine Hinweise
