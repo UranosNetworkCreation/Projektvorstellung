@@ -377,7 +377,7 @@ Ref<RandomNumberGenerator> rnd = RandomNumberGenerator::_new();
 
 Hierbei wird das `weights` Array wie folgt gebaut:
 ```
-[(Neuron 0),    (Neuron 1),    (...)]
+[(Neuron 0),    (Neuron 1),    ...]
     |               |           |
    w0, w1, ...     w0, w1, ...  w0, w1, ...
 ```
