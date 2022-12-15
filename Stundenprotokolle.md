@@ -97,3 +97,4 @@ export var optimized : Array
 Heute habe ich nun entgültig auch die Funktion der AI mit dem Blöcken gekoppelt, sodass die Sprache nun fast voll funktionsfähig ist. Zudem habe ich dass Repo noch etwas aufgeräumt.
 
 ## Was jetzt noch kommt/fehlt
+Ein großes Programm, was die meine visuelle Sprache noch hat, ist das Error-Handling. Oft ist es nähmlich aktuell so, dass wenn etwas schief läuft das Programm einfach abstürtzt oder garnichts passiert. Zwar lässt sich in der Konsole (Macro ' UNC_EXTENDED_DEBUG`), Debugger oft ein Fehler finden, aber langfristig möchte ich hier auf jeden Fall noch eine bessere Lösung implementieren.
