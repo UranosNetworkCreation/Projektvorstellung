@@ -32,9 +32,14 @@ Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt wer
 </details>
 
 ## Wie es funktioniert
-### Allgemeine Hinweise
+### Hinweise
 #### Syntax der Dokumentation
 Klasse (<- Vererbte Klasse)
+
+<details>
+<summary>
+<b>Allgemeines</b>
+</summary>
 
 #### Godot
 Das Projekt verwendet Godot 3, welches Standartfunktionen sowie UI-Elemente bereitstellt, auf denen die Software aufbaut. Da das Projekt langfristig auch 3D Modelle generieren soll, wurde hier bewusst auf eine Basis gesetzt, die auch als GameEngine genutzt werden kann, da so viele Funktionen auch im Bezug auf 3D Modelle schon vorhanden sind.<br>
@@ -52,7 +57,7 @@ Mit jeweiligen Kinder des Baumsystem können nun Scripte verknüpft werden. Stan
 
 ##### C++ (GDNative)
 Es kann auch C++ Code verknüpft werden, hier stellt sich jedoch die Funktionsweise etwas anders. Hierfür wird der Code zunächst in eine Dynamic-Link-Library (z. B. dll) kompiliert. Nun wird eine `.gdnlib` Datei erstellt die auf die libs für die einzelnen Plattformen verweist. Nun wird für jede Anbindung an Node des Baumsystem eine `.gdns` Datei erstellt, die unteranderem den Klassennamen und die verknüpfte `.gdnlib` Datei angibt.
-
+</details>
 <details>
 <summary><b>Die wichtigsten Klassen des Programms (GDScript)</b></summary>
 
@@ -186,7 +191,7 @@ gData.conns = get_connection_list()
 return gData
 ```
 
-### ResDataSync
+### ResDataSync (<- Object)
 Der `ResDataSync` stellt vor allem beim Laden und Speichern eine wichtige Rolle. Zusammengefasst besitzt Sie die Funktion alle Kinder eines Nodes durch zu gehen, zu gucken, ob dies Eingabefelder (oder ähnliches) sind, und dann eine Array aus den eingebenen Werten zu erstellen. Sie kann zudem auch eine solche Array auf mehere Eingabefelder laden. Die Funktion zum erstellen der Array (`collectData()`) ist wir folgt aufgebaut:
 ```GDScript
 # Create empty array for the result
@@ -211,7 +216,7 @@ func loadData(var data : Array):
             data_idx += 1
 ```
 
-### Editor
+### Editor (<- Control)
 Einen zentralen Schlüsselpunkt stellt natürlich die Editorklasse da. Eine wichtige Funktion ist hier beim Laden und Speichern das zusammen führen aller Resourcen. Dies geschieht beispielsweise beim Speichern in der Funktion `save_current(path)` wie folgt:
 ```GDScript
 # Create a new file container
@@ -243,7 +248,7 @@ Sowohl beim Laden als auch bei Speichern wird auf die UNCFile-Resource zurückge
 export var GData : Resource
 ```
 
-### PluginLoader
+### PluginLoader (<- Node)
 Der PluginLoader stellt die Schnittstelle zwischen dem Teil des Programms in GDScript und dem in GDNative (C++) da. Er lädt nämlich die einzelnen GDN-Scripte (d.h. die Libs, siehe [offizielle Dokumentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdnative/gdnative_cpp_example.html)) und verwaltet diese. Grundsätzlich werden alle Scripte aus dem Ordner `res://plugins/gdns` geladen, welche mit keinem Punkt beginnen. Das Laden der eines Plugins ist dann wie folgt umgesetzt:
 ```GDScript
 # Load plugin
