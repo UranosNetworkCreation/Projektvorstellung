@@ -24,8 +24,8 @@ Um den Datensatz zu erstellen, kann auf den Button "edit dataset ..." geklickt. 
 ### Schritt 5: Die AI-Trainieren
 **Hinweis:** *Je nach PC und eingestellten Durchläufen kann hier das Programm hurz einfrieren*<br>
 **Hinweis:** *Der Button "Run All" funktioniert noch nicht*<br><br>
-Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt werden und nun der Button "Start Training" gedrückt werden. Wird die KI nun über den Play-Button nochmal ausgeführt sollten sich die Ergebnisse im Output-Tab dementsprechend anpassen (Auch ohne das drücken des Play button sieht man schon eine Verbesserung, da beim Training die aktuellen Werte auch immer im Outputtab angezeigt werden).
-
+Um die KI nun zu trainieren kann nun die  Anzahl der Durchläufe eingestellt werden und nun der Button "Start Training" gedrückt werden. Wird die KI nun über den Play-Button nochmal ausgeführt sollten sich die Ergebnisse im Output-Tab dementsprechend anpassen (Auch ohne das drücken des Play button sieht man schon eine Verbesserung, da beim Training die aktuellen Werte auch immer im Outputtab angezeigt werden).<br>
+![train_button.png](https://github.com/UranosNetworkCreation/Doc/blob/main/img/train_button.png?raw=true)
 
 ## Wie es funktioniert
 ### Allgemeine Hinweise
